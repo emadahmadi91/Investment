@@ -2,7 +2,7 @@
 
 namespace Investment.Application.Common.Interfaces;
 
-public interface IInvestmentCalculator
+public interface IInterestCalculator
 {
     decimal CalculateInterest(InvestmentDto investmentDto);
 }

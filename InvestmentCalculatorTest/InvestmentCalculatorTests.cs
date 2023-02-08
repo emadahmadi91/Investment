@@ -10,7 +10,7 @@ public class InvestmentCalculatorTests
 {
     private Mock<IInvestmentCalendar> _investmendCalendar;
 
-    private InterestedCalculator _interestCalculator;
+    private InterestCalculator _interestCalculator;
 
     private const decimal NumberOfDaysInAYear = 365m;
     private const decimal NumberOfDaysInALeapYear = 366m;
@@ -19,7 +19,7 @@ public class InvestmentCalculatorTests
     public void Setup()
     {
         _investmendCalendar = new Mock<IInvestmentCalendar>();
-        _interestCalculator = new InterestedCalculator(_investmendCalendar.Object);
+        _interestCalculator = new InterestCalculator(_investmendCalendar.Object);
     }
 
     [Test]

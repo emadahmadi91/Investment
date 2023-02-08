@@ -3,7 +3,7 @@ using Investment.Domain.Dto;
 
 namespace Investment.InvestmentCalculator;
 
-public class InterestedCalculator : IInvestmentCalculator
+public class InterestCalculator : IInterestCalculator
 {
     private readonly IInvestmentCalendar _investmentCalendar;
          
@@ -11,7 +11,7 @@ public class InterestedCalculator : IInvestmentCalculator
     
     private const decimal NumberOfDaysInALeapYear = 366;
 
-    public InterestedCalculator(IInvestmentCalendar calendar)
+    public InterestCalculator(IInvestmentCalendar calendar)
     {
         _investmentCalendar = calendar;
     }

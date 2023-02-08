@@ -44,9 +44,9 @@ public class InvestmentControllerTest : BaseTestFixture
         var investment = new Investment
         {
             Name = "Name",
-            Principle = 1000m,
+            Principle = 10000m,
             Rate = 1.15m,
-            StartDate = DateTime.Now,
+            StartDate = DateTime.Now.AddYears(-1),
             InvestmentType = InvestmentType.Simple
         };
         await AddAsync(investment);
@@ -62,6 +62,8 @@ public class InvestmentControllerTest : BaseTestFixture
         items[0].Rate.Should().BeApproximately(investment.Rate, 00.1m);
         items[0].StartDate.Should().Be(investment.StartDate.ToString("yyyy-dd-MM"));
         items[0].InvestmentType.Should().Be(investment.InvestmentType.ToString());
+        items[0].Value.Should().NotBe(null);
+        items[0].Value.Should().NotBe(0);
     }
     
     [Test]
