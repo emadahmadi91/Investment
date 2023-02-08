@@ -1,4 +1,5 @@
 ﻿using Investment.Application.Investments.Commands.CreateInvestmentItem;
+using Investment.Application.Investments.Commands.DeleteInvestmentItem;
 using Investment.Application.Investments.Query;
 using Investment.Domain.Dto;
 using MediatR;
@@ -25,6 +26,14 @@ namespace Investment.WebApi.Controllers
         public async Task<ActionResult<List<InvestmentDto>>> Get()
         {
             return await Mediator.Send(new GetInvestmentsQuery());
+        }
+        
+        [HttpDelete("{name}")]
+        public async Task<ActionResult> Delete(string name)
+        {
+            await Mediator.Send(new DeleteTodoItemCommand(name));
+
+            return NoContent();
         }
     }
 }

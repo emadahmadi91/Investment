@@ -66,4 +66,26 @@ public class InvestmentControllerTest : BaseTestFixture
         items[0].StartDate.Should().Be(investment.StartDate.ToString("yyyy-dd-MM"));
         items[0].Type.Should().Be(investment.Type.ToString());
     }
+    
+    [Test]
+    public async Task ItDeletesInvestments()
+    {
+        // Arrange
+        var investment = new Investment
+        {
+            Name = "Name",
+            Principle = 1000m,
+            Rate = 1.15m,
+            StartDate = DateTime.Now,
+            Type = InvestmentType.Simple
+        };
+        await AddAsync(investment);
+        
+        // Act
+        var response = await GetClient().DeleteAsync($"/api/Investments/{investment.Name}");
+        
+        // Assert
+        response.EnsureSuccessStatusCode();
+        (await CountAsync<Investment>()).Should().Be(0);
+    }
 }

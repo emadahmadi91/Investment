@@ -51,6 +51,15 @@ public partial class Testing
         await context.SaveChangesAsync();
     }
     
+    public static async Task<int> CountAsync<TEntity>() where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        return await context.Set<TEntity>().CountAsync();
+    }
+    
     public static async Task ResetState()
     {
         using var scope = _scopeFactory.CreateScope();
