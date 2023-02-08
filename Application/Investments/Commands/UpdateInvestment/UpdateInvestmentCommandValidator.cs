@@ -16,6 +16,7 @@ public class UpdateInvestmentCommandValidator : AbstractValidator<UpdateInvestme
         RuleFor(v => v.UpdateInvestmentDto.Name)
             .NotEmpty().WithMessage("Should not be empty")
             .MustAsync(BeUniqueTitle).WithMessage("Name should be unique")
+            .Unless(v => v.OldName.Equals(v.UpdateInvestmentDto.Name))
             .OverridePropertyName("Name");
         
         RuleFor(v => v.UpdateInvestmentDto.Principle)

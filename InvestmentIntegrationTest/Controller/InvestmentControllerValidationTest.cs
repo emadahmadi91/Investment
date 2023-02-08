@@ -145,5 +145,32 @@ public class InvestmentControllerValidationTest : BaseTestFixture
         response.Should().Be400BadRequest().And
             .OnlyHaveError(errorField, message);
     }
+
+    [Test]
+    public async Task ItReturnsShouldUpdateTheInvestmentWithTheSameNameAsBeforeWhenUpdateANewInvestment()
+    {
+        var investment = new Investment
+        {
+            Name = "Name",
+            Principle = 1000m,
+            Rate = 1.15m,
+            StartDate = DateTime.Now,
+            InvestmentType = InvestmentType.Simple
+        };
+        await AddAsync(investment);
+        var investmentDto = new InvestmentDto
+        {
+            Name = investment.Name,
+            Principle = 1m,
+            Rate = 1m,
+            StartDate = "2000-09-19",
+            InvestmentType = "Compound"
+        };
+
+        var response = await GetClient().PutAsync($"/api/Investments/{investment.Name}",
+            new StringContent(JsonConvert.SerializeObject(investmentDto), Encoding.UTF8, "application/json"));
+        
+        response.Should().Be204NoContent();
+    }
     
 }
