@@ -41,7 +41,6 @@ public class InvestmentControllerTest : BaseTestFixture
     [Test]
     public async Task ItGetsInvestments()
     {
-        // Arrange
         var investment = new Investment
         {
             Name = "Name",
@@ -51,11 +50,9 @@ public class InvestmentControllerTest : BaseTestFixture
             Type = InvestmentType.Simple
         };
         await AddAsync(investment);
-
-        // Act
+        
         var response = await GetClient().GetAsync("/api/Investments");
         
-        // Assert
         response.EnsureSuccessStatusCode();
         var items = JsonConvert.DeserializeObject<List<InvestmentDto>>(await response.Content.ReadAsStringAsync());
         items.Count.Should().Be(1);
@@ -70,7 +67,6 @@ public class InvestmentControllerTest : BaseTestFixture
     [Test]
     public async Task ItDeletesInvestments()
     {
-        // Arrange
         var investment = new Investment
         {
             Name = "Name",
@@ -81,11 +77,43 @@ public class InvestmentControllerTest : BaseTestFixture
         };
         await AddAsync(investment);
         
-        // Act
         var response = await GetClient().DeleteAsync($"/api/Investments/{investment.Name}");
         
-        // Assert
         response.EnsureSuccessStatusCode();
         (await CountAsync<Investment>()).Should().Be(0);
+    }
+    
+    [Test]
+    public async Task ItUpdatesInvestments()
+    {
+        var investment = new Investment
+        {
+            Name = "Name",
+            Principle = 1000m,
+            Rate = 1.15m,
+            StartDate = DateTime.Now,
+            Type = InvestmentType.Simple
+        };
+        await AddAsync(investment);
+        var investmentDto = new InvestmentDto
+        {
+            Name = "new" + investment.Name,
+            Principle = 2000m,
+            Rate = 2.15m,
+            StartDate = "2021-09-09",
+            Type = "Simple"
+        };
+        
+        var response = await GetClient().PutAsync($"/api/Investments/{investment.Name}",
+            new StringContent(JsonConvert.SerializeObject(investmentDto), Encoding.UTF8, "application/json"));
+        
+        response.EnsureSuccessStatusCode();
+        var item = await FindBy<Investment>(i => i.Name == investmentDto.Name);
+        item.Should().NotBeNull();
+        item.Name.Should().BeEquivalentTo(investmentDto.Name);
+        item.Principle.Should().BeApproximately(investmentDto.Principle, 00.1m);
+        item.Rate.Should().BeApproximately(investmentDto.Rate, 00.1m);
+        item.StartDate.ToString("yyyy-dd-MM").Should().BeEquivalentTo(investmentDto.StartDate);
+        item.Type.Should().Be(Enum.Parse<InvestmentType>(investmentDto.Type));
     }
 }

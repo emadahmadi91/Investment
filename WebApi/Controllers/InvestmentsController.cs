@@ -1,5 +1,6 @@
 ﻿using Investment.Application.Investments.Commands.CreateInvestmentItem;
 using Investment.Application.Investments.Commands.DeleteInvestmentItem;
+using Investment.Application.Investments.Commands.UpdateInvestment;
 using Investment.Application.Investments.Query;
 using Investment.Domain.Dto;
 using MediatR;
@@ -32,6 +33,18 @@ namespace Investment.WebApi.Controllers
         public async Task<ActionResult> Delete(string name)
         {
             await Mediator.Send(new DeleteTodoItemCommand(name));
+
+            return NoContent();
+        }
+        
+        
+        [HttpPut("{name}")]
+        public async Task<ActionResult> UpdateItemDetails(string name,
+            [FromBody] UpdateInvestmentDTO updateInvestmentDto)
+        {
+            var updateInvestmentCommand = new UpdateInvestmentCommand
+                { OldName = name, UpdateInvestmentDto = updateInvestmentDto };
+            await Mediator.Send(updateInvestmentCommand);
 
             return NoContent();
         }
