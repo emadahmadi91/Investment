@@ -5,8 +5,8 @@ namespace Investment.Domain.Dto
         public string Name { get; set; } = null!;
         public decimal Principle { get; set; }
         public decimal Rate { get; set; }
-        public String StartDate { get; set; } = null!;
-        public String Type { get; set; } = null!;
+        public string StartDate { get; set; } = null!;
+        public string InvestmentType { get; set; } = null!;
         
         public decimal Value { get; set; }
     }

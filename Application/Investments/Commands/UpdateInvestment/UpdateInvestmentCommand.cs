@@ -17,7 +17,7 @@ public record UpdateInvestmentDTO
     public decimal Principle { get; set; } 
     public decimal Rate { get; set; }
     public DateTime StartDate { get; set; }
-    public string Type { get; set; }
+    public string InvestmentType { get; set; }
 }
 
 public class UpdateTodoItemCommandHandler : IRequestHandler<UpdateInvestmentCommand>
@@ -40,7 +40,7 @@ public class UpdateTodoItemCommandHandler : IRequestHandler<UpdateInvestmentComm
         entity.Principle = request.UpdateInvestmentDto.Principle;
         entity.Rate = request.UpdateInvestmentDto.Rate;
         entity.StartDate = request.UpdateInvestmentDto.StartDate;
-        entity.Type = Enum.Parse<InvestmentType>(request.UpdateInvestmentDto.Type);
+        entity.InvestmentType = Enum.Parse<InvestmentType>(request.UpdateInvestmentDto.InvestmentType);
 
         await _context.SaveChangesAsync(cancellationToken);
 

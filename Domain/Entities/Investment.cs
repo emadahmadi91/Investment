@@ -9,5 +9,5 @@ public class Investment
     public decimal Principle { get; set; }
     public decimal Rate { get; set; }
     public DateTime StartDate { get; set; }
-    public InvestmentType Type { get; set; }
+    public InvestmentType InvestmentType { get; set; }
 }

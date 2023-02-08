@@ -10,8 +10,8 @@ public record CreateInvestmentCommand : IRequest<int>
     public string Name { get; set; } = null!;
     public decimal Principle { get; set; }
     public decimal Rate { get; set; }
-    public DateTime StartDate { get; set; }
-    public String Type { get; set; } = null!;
+    public string StartDate { get; set; }
+    public string InvestmentType { get; set; } = null!;
 }
 
 public class CreateInvestmentCommandHandler : IRequestHandler<CreateInvestmentCommand, int>
@@ -30,8 +30,8 @@ public class CreateInvestmentCommandHandler : IRequestHandler<CreateInvestmentCo
             Name = request.Name,
             Principle = request.Principle,
             Rate = request.Rate,
-            StartDate = request.StartDate,
-            Type = Enum.Parse<InvestmentType>(request.Type),
+            StartDate = Convert.ToDateTime(request.StartDate),
+            InvestmentType = Enum.Parse<InvestmentType>(request.InvestmentType),
         };
         
         _context.Investments.Add(entity);

@@ -22,7 +22,7 @@ public class InvestmentControllerTest : BaseTestFixture
             Principle = 1000m,
             Rate = 1.15m,
             StartDate = "2020-09-09",
-            Type = "Simple"
+            InvestmentType = "Simple"
         };
         
         var response = await GetClient().PostAsync("/api/Investments",
@@ -35,7 +35,7 @@ public class InvestmentControllerTest : BaseTestFixture
         item.Principle.Should().BeApproximately(investmentDto.Principle, 00.1m);
         item.Rate.Should().BeApproximately(investmentDto.Rate, 00.1m);
         item.StartDate.ToString("yyyy-dd-MM").Should().BeEquivalentTo(investmentDto.StartDate);
-        item.Type.Should().Be(Enum.Parse<InvestmentType>(investmentDto.Type));
+        item.InvestmentType.Should().Be(Enum.Parse<InvestmentType>(investmentDto.InvestmentType));
     }
     
     [Test]
@@ -47,7 +47,7 @@ public class InvestmentControllerTest : BaseTestFixture
             Principle = 1000m,
             Rate = 1.15m,
             StartDate = DateTime.Now,
-            Type = InvestmentType.Simple
+            InvestmentType = InvestmentType.Simple
         };
         await AddAsync(investment);
         
@@ -61,7 +61,7 @@ public class InvestmentControllerTest : BaseTestFixture
         items[0].Principle.Should().BeApproximately(investment.Principle, 00.1m);
         items[0].Rate.Should().BeApproximately(investment.Rate, 00.1m);
         items[0].StartDate.Should().Be(investment.StartDate.ToString("yyyy-dd-MM"));
-        items[0].Type.Should().Be(investment.Type.ToString());
+        items[0].InvestmentType.Should().Be(investment.InvestmentType.ToString());
     }
     
     [Test]
@@ -73,7 +73,7 @@ public class InvestmentControllerTest : BaseTestFixture
             Principle = 1000m,
             Rate = 1.15m,
             StartDate = DateTime.Now,
-            Type = InvestmentType.Simple
+            InvestmentType = InvestmentType.Simple
         };
         await AddAsync(investment);
         
@@ -92,7 +92,7 @@ public class InvestmentControllerTest : BaseTestFixture
             Principle = 1000m,
             Rate = 1.15m,
             StartDate = DateTime.Now,
-            Type = InvestmentType.Simple
+            InvestmentType = InvestmentType.Simple
         };
         await AddAsync(investment);
         var investmentDto = new InvestmentDto
@@ -101,7 +101,7 @@ public class InvestmentControllerTest : BaseTestFixture
             Principle = 2000m,
             Rate = 2.15m,
             StartDate = "2021-09-09",
-            Type = "Simple"
+            InvestmentType = "Simple"
         };
         
         var response = await GetClient().PutAsync($"/api/Investments/{investment.Name}",
@@ -114,6 +114,6 @@ public class InvestmentControllerTest : BaseTestFixture
         item.Principle.Should().BeApproximately(investmentDto.Principle, 00.1m);
         item.Rate.Should().BeApproximately(investmentDto.Rate, 00.1m);
         item.StartDate.ToString("yyyy-dd-MM").Should().BeEquivalentTo(investmentDto.StartDate);
-        item.Type.Should().Be(Enum.Parse<InvestmentType>(investmentDto.Type));
+        item.InvestmentType.Should().Be(Enum.Parse<InvestmentType>(investmentDto.InvestmentType));
     }
 }
