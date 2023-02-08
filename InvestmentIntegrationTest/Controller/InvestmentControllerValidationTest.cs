@@ -91,6 +91,14 @@ public class InvestmentControllerValidationTest : BaseTestFixture
         var response = await GetClient().PutAsync($"/api/Investments/Name",
             new StringContent(JsonConvert.SerializeObject(investmentDto), Encoding.UTF8, "application/json"));
         
+        response.Should().Be404NotFound();
+    }
+    
+    
+    [Test]
+    public async Task ItReturnsNotFoundWhenInvestmentNameDoesNotExistsToDelete()
+    {
+        var response = await GetClient().DeleteAsync($"/api/Investments/Name");
         
         response.Should().Be404NotFound();
     }

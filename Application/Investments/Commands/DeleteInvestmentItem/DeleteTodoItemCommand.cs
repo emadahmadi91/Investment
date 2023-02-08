@@ -1,4 +1,5 @@
-﻿using Investment.Application.Common.Interfaces;
+﻿using Investment.Application.Common.Exceptions;
+using Investment.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,9 @@ public class DeleteTodoItemCommandHandler : IRequestHandler<DeleteTodoItemComman
             .Where(n => n.Name == request.Name)
             .FirstOrDefaultAsync(cancellationToken);
 
+        if (entity == null)
+            throw new NotFoundException(nameof(Investment), request.Name);
+        
         _context.Investments.Remove(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
