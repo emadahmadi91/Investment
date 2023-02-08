@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Investment.Application.Investments.Commands.CreateInvestmentItem;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Investment.WebApi.Controllers
 {
@@ -6,16 +8,14 @@ namespace Investment.WebApi.Controllers
     [Route("api/[controller]")]
     public class InvestmentsController : ControllerBase
     {
-        private readonly ILogger<InvestmentsController> _logger;
+        private ISender _mediator = null!;
 
-        public InvestmentsController(ILogger<InvestmentsController> logger)
-        {
-            _logger = logger;
-        }
+        protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<ISender>();
         
         [HttpPost]
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create([FromBody] CreateInvestmentCommand command)
         {
+            await Mediator.Send(command);
             return Ok();
         }
     }

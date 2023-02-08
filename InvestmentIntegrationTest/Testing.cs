@@ -1,6 +1,8 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Linq.Expressions;
+using System.Net.Http.Headers;
 using Investment.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -27,7 +29,16 @@ public partial class Testing
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         return httpClient;
     }
+    
+    public static async Task<TEntity?> FindBy<TEntity>(Expression<Func<TEntity,bool>> expression) where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
 
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        
+        return await context.Set<TEntity>().Where(expression).FirstOrDefaultAsync();
+    }
+    
     public static async Task ResetState()
     {
         using var scope = _scopeFactory.CreateScope();
