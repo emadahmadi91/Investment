@@ -76,4 +76,23 @@ public class InvestmentControllerValidationTest : BaseTestFixture
             .OnlyHaveError(errorField, message);
     }
     
+    [Test]
+    public async Task ItReturnsNotFoundWhenInvestmentNameDoesNotExistsToUpdate()
+    {
+        var investmentDto = new InvestmentDto
+        {
+            Name = "Name",
+            Principle = 2000m,
+            Rate = 2.15m,
+            StartDate = "2021-09-09",
+            InvestmentType = "Simple"
+        };
+        
+        var response = await GetClient().PutAsync($"/api/Investments/Name",
+            new StringContent(JsonConvert.SerializeObject(investmentDto), Encoding.UTF8, "application/json"));
+        
+        
+        response.Should().Be404NotFound();
+    }
+    
 }

@@ -1,4 +1,5 @@
-﻿using Investment.Application.Common.Interfaces;
+﻿using Investment.Application.Common.Exceptions;
+using Investment.Application.Common.Interfaces;
 using Investment.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +36,9 @@ public class UpdateTodoItemCommandHandler : IRequestHandler<UpdateInvestmentComm
             .Where(n => n.Name == request.OldName)
             .FirstOrDefaultAsync(cancellationToken);
 
-        
+        if (entity == null)
+            throw new NotFoundException(nameof(Investment), request.OldName);
+
         entity.Name = request.UpdateInvestmentDto.Name;
         entity.Principle = request.UpdateInvestmentDto.Principle;
         entity.Rate = request.UpdateInvestmentDto.Rate;
