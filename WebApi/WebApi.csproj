@@ -13,4 +13,9 @@
       <ProjectReference Include="..\InvestmentCalculator\InvestmentCalculator.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="FluentAssertions.Web" Version="1.2.5" />
+      <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+    </ItemGroup>
+
 </Project>
