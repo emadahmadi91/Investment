@@ -39,6 +39,18 @@ public partial class Testing
         return await context.Set<TEntity>().Where(expression).FirstOrDefaultAsync();
     }
     
+    public static async Task AddAsync<TEntity>(TEntity entity)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        context.Add(entity);
+
+        await context.SaveChangesAsync();
+    }
+    
     public static async Task ResetState()
     {
         using var scope = _scopeFactory.CreateScope();

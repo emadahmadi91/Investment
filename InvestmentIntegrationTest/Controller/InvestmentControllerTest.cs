@@ -37,4 +37,33 @@ public class InvestmentControllerTest : BaseTestFixture
         item.StartDate.ToString("yyyy-dd-MM").Should().BeEquivalentTo(investmentDto.StartDate);
         item.Type.Should().Be(Enum.Parse<InvestmentType>(investmentDto.Type));
     }
+    
+    [Test]
+    public async Task ItGetsInvestments()
+    {
+        // Arrange
+        var investment = new Investment
+        {
+            Name = "Name",
+            Principle = 1000m,
+            Rate = 1.15m,
+            StartDate = DateTime.Now,
+            Type = InvestmentType.Simple
+        };
+        await AddAsync(investment);
+
+        // Act
+        var response = await GetClient().GetAsync("/api/Investments");
+        
+        // Assert
+        response.EnsureSuccessStatusCode();
+        var items = JsonConvert.DeserializeObject<List<InvestmentDto>>(await response.Content.ReadAsStringAsync());
+        items.Count.Should().Be(1);
+        items[0].Should().NotBeNull();
+        items[0].Name.Should().BeEquivalentTo(investment.Name);
+        items[0].Principle.Should().BeApproximately(investment.Principle, 00.1m);
+        items[0].Rate.Should().BeApproximately(investment.Rate, 00.1m);
+        items[0].StartDate.Should().Be(investment.StartDate.ToString("yyyy-dd-MM"));
+        items[0].Type.Should().Be(investment.Type.ToString());
+    }
 }
