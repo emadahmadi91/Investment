@@ -11,7 +11,7 @@ public class InvestmentCalendar : IInvestmentCalendar
     
     private const int FirstMonthOfYear = 1;
     
-    private const int FirstDayOfYear = 1;
+    private const int FirstDayOfMonth = 1;
     
     private const int DayCarriedForwardBetweenYear = 1;
     
@@ -28,7 +28,7 @@ public class InvestmentCalendar : IInvestmentCalendar
         
         var investmentDays = new InvestmentDays() { LeapYearDays = 0, RegularYearDays = 0 };
 
-        if (startDate > _dateTime.Now)
+        if (startDate > DateTimeNowClipToTheClosestMonth())
             return investmentDays;
         
         return CalculateDaysYearly(investmentDays, startDate);
@@ -38,7 +38,7 @@ public class InvestmentCalendar : IInvestmentCalendar
     {
         var lastCheckedDateEndOfYear = new DateTime(lastCheckedDate.Year, LastMonthOfYear, LastDayOfYear);
         
-        if (lastCheckedDateEndOfYear < _dateTime.Now)
+        if (lastCheckedDateEndOfYear < DateTimeNowClipToTheClosestMonth())
         {
             var tillEndOfYearDays = (lastCheckedDateEndOfYear - lastCheckedDate).Days + DayCarriedForwardBetweenYear;
             if (DateTime.IsLeapYear(lastCheckedDateEndOfYear.Year))
@@ -48,10 +48,10 @@ public class InvestmentCalendar : IInvestmentCalendar
                 investmentDays.RegularYearDays += tillEndOfYearDays;
             }
 
-            return CalculateDaysYearly(investmentDays, new DateTime(lastCheckedDate.Year + 1, FirstMonthOfYear, FirstDayOfYear));
+            return CalculateDaysYearly(investmentDays, new DateTime(lastCheckedDate.Year + 1, FirstMonthOfYear, FirstDayOfMonth));
         }
 
-        var days = (_dateTime.Now - lastCheckedDate).Days;
+        var days = (DateTimeNowClipToTheClosestMonth() - lastCheckedDate).Days;
 
         if (DateTime.IsLeapYear(lastCheckedDate.Year))
         {
@@ -61,5 +61,16 @@ public class InvestmentCalendar : IInvestmentCalendar
         }
 
         return investmentDays;
-    } 
+    }
+    
+    private DateTime DateTimeNowClipToTheClosestMonth()
+    {
+        var now = _dateTime.Now;
+        
+        return now.Day < DateTime.DaysInMonth(now.Year, now.Month) / 2 
+            ? new DateTime(now.Year, now.Month, FirstDayOfMonth)
+            : now.Month + 1 <= 12 
+                ? new DateTime(now.Year, now.Month + 1, FirstDayOfMonth)
+                : new DateTime(now.Year + 1, FirstMonthOfYear, FirstDayOfMonth);
+    }
 }
