@@ -28,12 +28,10 @@ public class GetInvestmentsHandler : IRequestHandler<GetInvestmentsQuery, List<I
 
     public async Task<List<InvestmentDto>> Handle(GetInvestmentsQuery request, CancellationToken cancellationToken)
     {
-        return await _context.Investments
+        return  _context.Investments
             .OrderBy(x => x.Id)
             .ProjectTo<InvestmentDto>(_mapper.ConfigurationProvider)
-            .ToListAsync(cancellationToken)
-            .CalculateInvestment(_interestCalculator)
-            ;
+            .CalculateInvestment(_interestCalculator).ToList();
     }
 }
 
